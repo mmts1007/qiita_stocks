@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Qiita Stocks</title>
+        <script src="js/lodash.js"></script>
+        <script src="js/angular.min.js"></script>
+        <script src="js/index.js"></script>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body ng-app="qiitaStock">
+      <div class="container" ng-controller="indexController as index">
+        <h1>Qiita Stocks</h1>
+        <div class="col-md-12">
+          <input type="text" class="form-control" placeholder="Search stocks" ng-model="searchStocks">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th></th>
+                <th>title</th>
+                <th>tags</th>
+                <th>updated_at</th>
+                <th>action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="item in items | filter: searchStocks" data-item-id="{{ item.id }}">
+                <td>
+                  <img class="img-rounded" width="48px" height="48px" ng-src="{{ item.user.profile_image_url }}" />
+                </td>
+                <td>
+                  <a href="{{ item.url }}" target="_blank">
+                    {{ item.title }}
+                  </a>
+                </td>
+                <td>
+                  <span ng-repeat="tag in item.tags" >{{ tag.name }}{{ $last ? '' : ', ' }}</span>
+                </td>
+                <td>
+                  {{ item.updated_at | date: 'yyyy/MM/dd HH:mm:ss' }}
+                </td>
+                <td>
+                  <button type="button" class="btn btn-danger" ng-click="index.deleteStock(item.id)" ng-disabled="!canDelete">Release Stock</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-md-12">
+          <button type="button" class="btn btn-default" style="width: 100%" ng-click="index.readMore()">Read more...</button>
+        </div>
+      </div>
+      <footer style="height: 100px"></footer>
+    </body>
+</html>
