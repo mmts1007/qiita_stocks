@@ -1,0 +1,10 @@
+body {
+  padding-top: 70px;
+}
+.navbar-default {
+  background-color: #fff;
+}
+.navbar-default .navbar-brand {
+  color:     #59bb0c;
+  font-size: 25px;
+}

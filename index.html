@@ -6,11 +6,27 @@
         <script src="js/lodash.js"></script>
         <script src="js/angular.min.js"></script>
         <script src="js/index.js"></script>
+        <script src="js/spin.min.js"></script>
+        <script src="js/angular-spinner.min.js"></script>
         <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/index.css" rel="stylesheet">
     </head>
-    <body ng-app="qiitaStock">
-      <div class="container" ng-controller="indexController as index">
-        <h1>Qiita Stocks</h1>
+    <body ng-app="qiitaStock" ng-controller="indexController as index">
+      <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">Qiita Stocks</a>
+          </div>
+          <form class="navbar-form navbar-right" role="search">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="User ID" ng-model="userId">
+              <input type="text" class="form-control" placeholder="Access Tokne" ng-model="accessToken">
+            </div>
+            <button type="submit" class="btn btn-default" ng-click="index.setup()">Submit</button>
+          </form>
+        <div>
+      </nav>
+      <div class="container">
         <div class="col-md-12">
           <input type="text" class="form-control" placeholder="Search stocks" ng-model="searchStocks">
           <table class="table table-striped">
@@ -24,7 +40,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="item in items | filter: searchStocks" data-item-id="{{ item.id }}">
+              <tr ng-repeat="item in items.list | filter: searchStocks" data-item-id="{{ item.id }}">
                 <td>
                   <img class="img-rounded" width="48px" height="48px" ng-src="{{ item.user.profile_image_url }}" />
                 </td>
@@ -40,14 +56,17 @@
                   {{ item.updated_at | date: 'yyyy/MM/dd HH:mm:ss' }}
                 </td>
                 <td>
-                  <button type="button" class="btn btn-danger" ng-click="index.deleteStock(item.id)" ng-disabled="!canDelete">Release Stock</button>
+                  <button type="button" class="btn btn-danger" ng-click="index.releaseStock(item.id)" ng-disabled="!items.canDelete">Release Stock</button>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
         <div class="col-md-12">
-          <button type="button" class="btn btn-default" style="width: 100%" ng-click="index.readMore()">Read more...</button>
+          <button type="button" class="btn btn-default" style="width: 100%" ng-click="index.readMore()" ng-hide="items.list == null || items.list.length == 0 || items.isLoading" ng-disabled="page.isLast">
+            Read more...
+          </button>
+          <span us-spinner="{radius:4, width:1, length: 5}" ng-show="items.isLoading"></span>
         </div>
       </div>
       <footer style="height: 100px"></footer>
